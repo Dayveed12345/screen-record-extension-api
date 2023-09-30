@@ -14,7 +14,8 @@ class VideoResource extends JsonResource
 
      */
     public function split($date){
-        return Carbon::createFromFormat('Y-m-d H:i:s',$date);
+        $split=explode(' ',$date)[0];
+      return Carbon::createFromFormat('Y-m-d',$split)->format('d, F Y');
     }
     public function toArray(Request $request): array
     {
@@ -24,7 +25,7 @@ class VideoResource extends JsonResource
             'length'=>$this->length,
             'path'=>$this->path,
             'uploaded_time'=>$this->uploaded_time,
-            'human_time_diff'=>$this->split( $this->uploaded_time)->diffForHumans()
+            'date_uploaded'=>$this->split($this->uploaded_time)
         ];
 
     }
