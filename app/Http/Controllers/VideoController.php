@@ -31,10 +31,12 @@ class VideoController extends Controller
         ]);
 
         $uploadedVideo = $request->file('video');
-        $videoName=$request->all();
 
-        $path = $uploadedVideo->storeAs('videos',   $videoName);
-        $localPath = $uploadedVideo->storeAs('videos',   $videoName, 'public');
+
+        $timestampName ='untitled_'.time() .'.'. $uploadedVideo->getClientOriginalExtension();
+
+        $path = $uploadedVideo->storeAs('videos',   $timestampName);
+        $localPath = $uploadedVideo->storeAs('videos',   $timestampName, 'public');
 
         if ($path) :
 
@@ -58,28 +60,28 @@ class VideoController extends Controller
             $fileInfo = $getID3->analyze($localVideoFilePath);
             $videoLength = isset($fileInfo['playtime_string']) ? $fileInfo['playtime_string'] : '00.00';
             $video = new Video;
-            $video->name = $videoName;
+            $video->name =   $timestampName;
             $video->size = $videoSize;
             $video->length = $videoLength;
             $video->path = $fullVideoPath;
             $video->uploaded_time = Carbon::now();
             $checking = $video->save();
             // Deleting the file from local storage
-            $filePathToDelete = 'app/public/videos/' .   $videoName;
+            $filePathToDelete = 'app/public/videos/' .   $timestampName;
             $fullFilePath = storage_path($filePathToDelete);
             unlink($fullFilePath);
             if ($checking) :
                 return response()->json([
                     'StatusCode' => 201,
                     'message' => 'Image has been uploaded successfully',
-                    'status' => 'created',
+                    'status' => 'success',
                     'data' => [
-                        'video_name' =>   $videoName,
+                        'video_name' =>   $timestampName,
                         'video_size' => $videoSize,
                         'video_length' => $videoLength,
                         'video_path' => $fullVideoPath
                     ]
-                ],201);
+                ]);
             else :
                 return response()->json([
                     'StatusCode' => 400,
