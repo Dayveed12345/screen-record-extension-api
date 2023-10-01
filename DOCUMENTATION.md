@@ -36,6 +36,7 @@ Here are the available API endpoints:
         -video_size
         -video_length
         -video_path
+        -full-date-format
 if not successful
 - Response Format
     - StatusCode:401,
@@ -61,7 +62,7 @@ if not successful
         - length:3:51 `minute of the video `
         - path:`Path/to/the/video.mp4`
         - uploaded_time:`2023-09-29 20:39:41`
-        - human_readable_time:`2 days ago`
+        - full-date-time:`23, september 2023`
 
 ## Known Limitations
 
