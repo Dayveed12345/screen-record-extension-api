@@ -72,7 +72,7 @@ class VideoController extends Controller
                 return response()->json([
                     'StatusCode' => 201,
                     'message' => 'Image has been uploaded successfully',
-                    'status' => 'success',
+                    'status' => 'created',
                     'data' => [
                         'video_name' =>   $videoName,
                         'video_size' => $videoSize,
