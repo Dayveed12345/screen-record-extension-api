@@ -46,30 +46,17 @@ class VideoController extends Controller
             $videoFilePath = $this->storePath('s3', $path);
             $localVideoFilePath = $this->storePath('local', 'public/' . $localPath);
             $fullVideoPath = 'https://hng-video-upload.s3.us-east-1.amazonaws.com/' . $videoFilePath;
-            $response = Http::withHeaders(['Authorization' => 'Bearer GR1EJSH7RYBZGTJLU8DL92IXTK191K1X'])
-                ->attach('file', $fullVideoPath)
-                ->post(
-                    'https://transcribe.whisperapi.com',
-                    [
-                        'fileType' => 'mp4',
-                        'diarization' => 'false',
-                        'task' => 'transcribe'
-                    ]
-                );
+            // $response = Http::withHeaders(['Authorization' => 'Bearer GR1EJSH7RYBZGTJLU8DL92IXTK191K1X'])
+            //     ->attach('file', $fullVideoPath)
+            //     ->post(
+            //         'https://transcribe.whisperapi.com',
+            //         [
+            //             'fileType' => 'mp4',
+            //             'diarization' => 'false',
+            //             'task' => 'transcribe'
+            //         ]
+            //     );
             $fullVideoPath = 'https://hng-video-upload.s3.us-east-1.amazonaws.com/' . $videoFilePath;
-        //    $url = fopen($fullVideoPath, 'r');
-            // $response = Http::withOptions([
-            //     'curl' => [CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1], // Set HTTP/1.1
-            // ])->withHeaders(['Authorization' => 'Bearer GR1EJSH7RYBZGTJLU8DL92IXTK191K1X'])
-            //     ->attach('file', $url) // Replace 'your-video-file.mp4' with the actual filename
-            //     ->post('https://transcribe.whisperapi.com', [
-            //         'fileType' => 'mp4',
-            //         'diarization' => 'false',
-            //         'task' => 'transcribe',
-            //     ]);
-
-            // Define the full video URL.
-            // dd($response->json());
             $fileInfo = $getID3->analyze($localVideoFilePath);
             $videoLength = isset($fileInfo['playtime_string']) ? $fileInfo['playtime_string'] : '00.00';
             $video = new Video;
