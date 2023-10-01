@@ -13,12 +13,14 @@ class VideoResource extends JsonResource
      *
 
      */
+    protected $count=0;
     public function split($date){
         $split=explode(' ',$date)[0];
       return Carbon::createFromFormat('Y-m-d',$split)->format('d, F Y');
     }
     public function toArray(Request $request): array
     {
+          
         return [
             'id'=>$this->id,
             'name'=>$this->name,

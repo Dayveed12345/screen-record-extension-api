@@ -101,7 +101,7 @@ class VideoController extends Controller
     }
     public function getVideo()
     {
-        $video = Video::all(['name', 'size', 'length', 'path', 'uploaded_time']);
+        $video = Video::all(['id','name', 'size', 'length', 'path', 'uploaded_time']);
         if (!$video->isEmpty()) :
             return response()->json([
                 'StatusCode' => 200,
