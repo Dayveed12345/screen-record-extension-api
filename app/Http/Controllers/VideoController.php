@@ -31,12 +31,9 @@ class VideoController extends Controller
         ]);
 
         $uploadedVideo = $request->file('video');
-
-        $videoName = $uploadedVideo->getClientOriginalName();
-        $timestampName = time() .'.'. $uploadedVideo->getClientOriginalExtension();
-
-        $path = $uploadedVideo->storeAs('videos',   $timestampName);
-        $localPath = $uploadedVideo->storeAs('videos',   $timestampName, 'public');
+        $videoName=$request->name('original_name');
+        $path = $uploadedVideo->storeAs('videos',   $videoName);
+        $localPath = $uploadedVideo->storeAs('videos',   $videoName, 'public');
 
         if ($path) :
 
@@ -60,15 +57,14 @@ class VideoController extends Controller
             $fileInfo = $getID3->analyze($localVideoFilePath);
             $videoLength = isset($fileInfo['playtime_string']) ? $fileInfo['playtime_string'] : '00.00';
             $video = new Video;
-            $video->name =   $timestampName;
-            $video->title=$videoName;
+            $video->name = $videoName;
             $video->size = $videoSize;
             $video->length = $videoLength;
             $video->path = $fullVideoPath;
             $video->uploaded_time = Carbon::now();
             $checking = $video->save();
             // Deleting the file from local storage
-            $filePathToDelete = 'app/public/videos/' .   $timestampName;
+            $filePathToDelete = 'app/public/videos/' .   $videoName;
             $fullFilePath = storage_path($filePathToDelete);
             unlink($fullFilePath);
             if ($checking) :
@@ -77,13 +73,12 @@ class VideoController extends Controller
                     'message' => 'Image has been uploaded successfully',
                     'status' => 'success',
                     'data' => [
-                        'video_name' =>   $timestampName,
-                        'video_title'=>$videoName,
+                        'video_name' =>   $videoName,
                         'video_size' => $videoSize,
                         'video_length' => $videoLength,
                         'video_path' => $fullVideoPath
                     ]
-                ]);
+                ],201);
             else :
                 return response()->json([
                     'StatusCode' => 400,

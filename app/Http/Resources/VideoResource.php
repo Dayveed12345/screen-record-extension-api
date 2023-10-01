@@ -20,8 +20,7 @@ class VideoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'time_stamp_name'=>$this->name,
-            'original_name'=>$this->title,
+            'name'=>$this->name,
             'size'=>$this->size,
             'length'=>$this->length,
             'path'=>$this->path,
