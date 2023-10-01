@@ -31,7 +31,7 @@ class VideoController extends Controller
         ]);
 
         $uploadedVideo = $request->file('video');
-        $videoName=$request->all(['original_name']);
+        $videoName=$request->all();
 
         $path = $uploadedVideo->storeAs('videos',   $videoName);
         $localPath = $uploadedVideo->storeAs('videos',   $videoName, 'public');
