@@ -78,6 +78,7 @@ class VideoController extends Controller
                     'status' => 'success',
                     'data' => [
                         'video_name' =>   $timestampName,
+                        'video_title'=>$videoName,
                         'video_size' => $videoSize,
                         'video_length' => $videoLength,
                         'video_path' => $fullVideoPath
