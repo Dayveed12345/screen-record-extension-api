@@ -20,4 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('',[VideoController::class,'uploadVideo'])->name('Upload');
 Route::get('',[VideoController::class,'getVideo']);
-// Route::post('/trans',[VideoController::class,'trans']);
+Route::get('/{id}',[VideoController::class,'InsertTranscribe']);

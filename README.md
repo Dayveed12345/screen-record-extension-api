@@ -1,66 +1,90 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# API Documentation for SCREEN-RECORD-EXTENSION-API
 
-## About Laravel
+## Introduction
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Welcome to the API documentation for Screen-Record-api. This document provides comprehensive information on how to use the API, including sample requests and responses, installation instructions, deployment options, known limitations, contributing guidelines, and contact information.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Table of Contents
+- [API Endpoints](#api-endpoints)
+- [Known Limitations](#known-limitations)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- [Contact Information](#contact-information)
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## API Endpoints
 
-## Laravel Sponsors
+Here are the available API endpoints:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+-    Create a New Video (POST)   
+  - Endpoint: `/api/`
+  - Description: Create a new user in the system.
+  - Request Format:
+    - HTTP Method: POST
+    - Headers: Content-Type: application/json
+	        Accept: application/json
+    - Body: JSON object with user details.
+    If the response was successful
+  - Response Format:
+    - StatusCode: 201
+    - message:Image has been uploaded successfully
+    - status:success
+    -data
+        -video_name
+        -video_size
+        -video_length
+        -video_path
+        -full-date-format
+if not successful
+- Response Format
+    - StatusCode:401,
+    - message:An Error occurred while trying to Save
+    - status:error
+- Response Format
+    - StatusCode:400,
+    - message:Bad Request an Error Occurred
+    - status:error
+    ---
+-    Fetch Video (GET)   
+  - Endpoint: `/api/`
+  - Description: Fetch details of videos uploaded
+  - Request Format:
+    - HTTP Method: GET
+  - Response Format:
+    - StatusCode: 200 
+    - message:Image displayed Successfully
+	- status:success
+    - data:
+        - name:Video_name.mp4
+        - size:12.11mb `size of the video in mb`
+        - length:3:51 `minute of the video `
+        - path:`Path/to/the/video.mp4`
+        - uploaded_time:`2023-09-29 20:39:41`
+        - full-date-time:`23, september 2023`
 
-### Premium Partners
+## Known Limitations
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+- The API currently supports a maximum of 100 simultaneous connections. If your application experiences high traffic, consider implementing load balancing.
 
-## Contributing
+- Pagination for large result sets is not yet implemented. If your application expects large data sets, additional features may be required to handle pagination effectively.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- The API assumes that all incoming data is correctly formatted and validated on the client side. Proper input validation and error handling on the client are crucial to ensure the API functions as expected.
 
-## Code of Conduct
+- Authentication and authorization mechanisms are not included in this API documentation. Depending on your application's security requirements, additional layers of security may need to be implemented.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- The API documentation may not cover all edge cases or specific use cases. It's essential to thoroughly test the API in your application's context and provide appropriate error handling and feedback to users.
 
-## Security Vulnerabilities
+- This API is built with performance in mind, but specific performance tuning and optimizations may be required based on the scale and complexity of your application. Monitor API performance in production and make adjustments as needed.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Note that this API is subject to updates and improvements. Ensure you keep the API library up-to-date and follow any release notes or migration guides provided.
+Here are some example API endpoints:
 
-## License
+- Create a new resource: `POST http://localhost:8000/api`
+- Read all resources: `GET http://localhost:8000/api`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Contact Information
+
+For questions or support, please contact Nwinyinya David at nwinyinyadavid123@gmail.com.

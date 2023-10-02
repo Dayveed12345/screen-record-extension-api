@@ -20,6 +20,6 @@ class Video extends Model
     }
     public function word():HasMany
     {
-        return $this->has(word::class);
+        return $this->hasMany(word::class);
     }
 }

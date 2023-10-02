@@ -57,14 +57,12 @@ class VideoController extends Controller
             $fullFilePath = storage_path($filePathToDelete);
             unlink($fullFilePath);
             if ($save) :
-                $videoId = Video::where('name', $timestampName)->select(['id'])->get();
-                $this->InsertTranscribe($videoId, $fullVideoPath);
                 return  $this->successJson([$timestampName, $videoSize, $videoLength, $fullVideoPath], 201);
             else :
                 return $this->errorJson('Bad Request an Error Occurred', 401);
             endif;
         else :
-            return $this->errorJson('An Error occurred While trying to Save file ', 401);
+            return $this->errorJson('An Error occurred While trying to Save file, Check Internet Connection ', 401);
         endif;
     }
     public function getVideo()
@@ -83,15 +81,19 @@ class VideoController extends Controller
         echo "<pre>";
         print_r(json_decode($getJson, JSON_PRETTY_PRINT));
     }
-    public function InsertTranscribe(int $id, $fullVideoPath)
+    public function InsertTranscribe(int $id)
     {
-        $getID = $id;
+        $getID=$id;
+    //     $get = Video::where('id', $id)->select(['id','path'])->get();
+    //    $getID=$get->id;
+    //    $fullVideoPath=$get->path;
         // Instantiating all models and tables for transcription
         $seg = new segment;
         $trans = new transcript;
         $word = new word;
         // $Json = file_get_contents($this->storePath('local', 'public/transcribe.json'));
-        $json = $this->transcribe($fullVideoPath);
+        // $json = $this->transcribe($fullVideoPath);
+        $json = file_get_contents($this->storePath('local', 'public/transcribe.json'));
         $getJson = json_decode($json, JSON_PRETTY_PRINT);
 
         foreach ($getJson as $get) {

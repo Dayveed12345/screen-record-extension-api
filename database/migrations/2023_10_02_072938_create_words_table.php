@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('end');
             $table->string('probability');
             $table->string('timestamp');
+            $table->timestamps();
         });
     }
 

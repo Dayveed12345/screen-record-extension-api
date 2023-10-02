@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('segments', function (Blueprint $table) {
             $table->id()->nullable();
            $table->unsignedBigInteger('transcripts_id')->references('id')->on('transcripts')->onDelete('cascade')->nullable();
+           $table->string('start')->nullable();
            $table->string('end')->nullable();
-           $table->text('segment_text')->nullable();
+           $table->text('text')->nullable();
+           $table->timestamps();
         });
     }
 
