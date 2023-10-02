@@ -87,9 +87,11 @@ class VideoController extends Controller
         // $getID=$id;
         $get = Video::where('id', $id)->select('path')->get();
 
-        $json = $this->transcribe($get);
-        return $json;
-
+         if( $this->transcribe($get)):
+        return $this->fetchOrFailData(200, 'success', $get);
+         else:
+            return $this->fetchOrFailData(404, 'error', 'An error occurred');
+         endif;
     }
     public function truncate($table)
     {

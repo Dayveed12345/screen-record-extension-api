@@ -64,7 +64,10 @@ if not successful
         - uploaded_time:`2023-09-29 20:39:41`
         - full-date-time:`23, september 2023`
     Fetch the Transcripted Data(GET)
-    **Data**:
+      - StatusCode: 200 
+    - message:Image displayed Successfully
+	- status:success
+    - data:
 
 ```json
 {
