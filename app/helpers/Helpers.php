@@ -24,7 +24,7 @@ trait Helpers
                     'task' => 'transcribe'
                 ]
             );
-        dd($response->json());
+        return $response->json();
     }
     public function successJson( $array=[], int $statusCode){
         return response()->json([

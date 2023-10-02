@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\helpers\Helpers;
 use App\Http\Resources\VideoResource;
+use App\Models\segment;
+use App\Models\transcript;
 use App\Models\Video;
+use App\Models\word;
 use Illuminate\Http\Request;
 
 use getID3;
@@ -42,7 +45,7 @@ class VideoController extends Controller
             $fileInfo = $getID3->analyze($localVideoFilePath);
             $videoLength = isset($fileInfo['playtime_string']) ? $fileInfo['playtime_string'] : '00.00';
             // $this->transcribe($fullVideoPath);
-           $save= $this->saveVideo([
+            $save = $this->saveVideo([
                 $timestampName,
                 $videoSize,
                 $videoLength,
@@ -54,6 +57,8 @@ class VideoController extends Controller
             $fullFilePath = storage_path($filePathToDelete);
             unlink($fullFilePath);
             if ($save) :
+                $videoId = Video::where('name', $timestampName)->select(['id'])->get();
+                $this->InsertTranscribe($videoId, $fullVideoPath);
                 return  $this->successJson([$timestampName, $videoSize, $videoLength, $fullVideoPath], 201);
             else :
                 return $this->errorJson('Bad Request an Error Occurred', 401);
@@ -70,5 +75,46 @@ class VideoController extends Controller
         else :
             return $this->fetchOrFailData(404, 'error', 'no data found');
         endif;
+    }
+    public function checkingView()
+    {
+        $getJson = file_get_contents($this->storePath('local', 'public/transcribe.json'));
+        //    return  file_get_contents( $this->storePath('local', 'public/transcribe.json'));
+        echo "<pre>";
+        print_r(json_decode($getJson, JSON_PRETTY_PRINT));
+    }
+    public function InsertTranscribe(int $id, $fullVideoPath)
+    {
+        $getID = $id;
+        // Instantiating all models and tables for transcription
+        $seg = new segment;
+        $trans = new transcript;
+        $word = new word;
+        // $Json = file_get_contents($this->storePath('local', 'public/transcribe.json'));
+        $json = $this->transcribe($fullVideoPath);
+        $getJson = json_decode($json, JSON_PRETTY_PRINT);
+
+        foreach ($getJson as $get) {
+            $trans->videos_id = $getID;
+            $trans->text = $get['text'];
+            $trans->language = $get['language'];
+            $trans->save();
+            foreach ($get['segments'] as $segment) {
+                $seg->transcripts_id = $getID;
+                $seg->start = $segment['start'];
+                $seg->end =  $segment['end'];
+                $seg->text = $segment['text'];
+                $seg->save();
+                foreach ($segment['whole_word_timestamps'] as $whole_word_timestamps) {
+                    $word->segments_id = $getID;
+                    $word->word = $whole_word_timestamps['word'];
+                    $word->start = $whole_word_timestamps['start'];
+                    $word->end = $whole_word_timestamps['end'];
+                    $word->probability = $whole_word_timestamps['probability'];
+                    $word->timestamp = $whole_word_timestamps['timestamp'];
+                    $word->save();
+                }
+            }
+        }
     }
 };
