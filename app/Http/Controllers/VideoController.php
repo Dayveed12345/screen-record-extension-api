@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\helpers\Helpers;
+use Illuminate\Support\Facades\DB;
 use App\Http\Resources\VideoResource;
 use App\Models\segment;
 use App\Models\transcript;
@@ -74,49 +75,27 @@ class VideoController extends Controller
             return $this->fetchOrFailData(404, 'error', 'no data found');
         endif;
     }
-    public function checkingView()
-    {
-        $getJson = file_get_contents($this->storePath('local', 'public/transcribe.json'));
-        //    return  file_get_contents( $this->storePath('local', 'public/transcribe.json'));
-        echo "<pre>";
-        print_r(json_decode($getJson, JSON_PRETTY_PRINT));
-    }
+    // public function checkingView()
+    // {
+    //     $getJson = file_get_contents($this->storePath('local', 'public/transcribe.json'));
+    //     //    return  file_get_contents( $this->storePath('local', 'public/transcribe.json'));
+    //     echo "<pre>";
+    //     print_r(json_decode($getJson, JSON_PRETTY_PRINT));
+    // }
     public function InsertTranscribe(int $id)
     {
-        $getID=$id;
-    //     $get = Video::where('id', $id)->select(['id','path'])->get();
-    //    $getID=$get->id;
-    //    $fullVideoPath=$get->path;
-        // Instantiating all models and tables for transcription
-        $seg = new segment;
-        $trans = new transcript;
-        $word = new word;
-        // $Json = file_get_contents($this->storePath('local', 'public/transcribe.json'));
-        // $json = $this->transcribe($fullVideoPath);
-        $json = file_get_contents($this->storePath('local', 'public/transcribe.json'));
-        $getJson = json_decode($json, JSON_PRETTY_PRINT);
+        // $getID=$id;
+        $get = Video::where('id', $id)->select('path')->get();
 
-        foreach ($getJson as $get) {
-            $trans->videos_id = $getID;
-            $trans->text = $get['text'];
-            $trans->language = $get['language'];
-            $trans->save();
-            foreach ($get['segments'] as $segment) {
-                $seg->transcripts_id = $getID;
-                $seg->start = $segment['start'];
-                $seg->end =  $segment['end'];
-                $seg->text = $segment['text'];
-                $seg->save();
-                foreach ($segment['whole_word_timestamps'] as $whole_word_timestamps) {
-                    $word->segments_id = $getID;
-                    $word->word = $whole_word_timestamps['word'];
-                    $word->start = $whole_word_timestamps['start'];
-                    $word->end = $whole_word_timestamps['end'];
-                    $word->probability = $whole_word_timestamps['probability'];
-                    $word->timestamp = $whole_word_timestamps['timestamp'];
-                    $word->save();
-                }
-            }
-        }
+        $json = $this->transcribe($get);
+        return $json;
+
+    }
+    public function truncate($table)
+    {
+        DB::table($table)->truncate();
+        return response()->json([
+            'messge'=>"Table: $table,  was deleted successfully"
+        ]);
     }
 };
